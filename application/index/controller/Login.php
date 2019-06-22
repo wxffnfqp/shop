@@ -49,6 +49,6 @@ class Login extends Controller
     }
     function out(){
         Session::delete('name');
-        $this->register('login/login');
+        $this->register('index/index');
     }
 }
