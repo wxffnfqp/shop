@@ -1,3 +1,5 @@
+<link type="text/css" rel="stylesheet" href="__CSS__/showBo.css" />
+<script type="text/javascript" src="__JS__/showBo.js"></script>
 <footer class="page-footer fixed-footer" id="footer">
     <ul>
         <li class="active">
@@ -13,16 +15,41 @@
             </a>
         </li>
         <li>
+            {if $Think.session.name==''}
+            <a id="shopcar_login">
+                <i class="iconfont icon-gouwuche"></i>
+                <p>购物车</p>
+            </a>
+            {else}
             <a href="{:url('Shop/shopcar')}">
                 <i class="iconfont icon-gouwuche"></i>
                 <p>购物车</p>
             </a>
+            {/if}
         </li>
         <li>
+            {if $Think.session.name==''}
             <a href="{:url('Login/login')}">
                 <i class="iconfont icon-yonghuming"></i>
                 <p>我的</p>
             </a>
+            {else}
+            <a href="{:url('user/center')}">
+                <i class="iconfont icon-yonghuming"></i>
+                <p>我的</p>
+            </a>
+            {/if}
         </li>
     </ul>
 </footer>
+<script>
+    $('#shopcar_login').click(function () {
+        shop=Showbo.Msg.confirm('需要登录，是否是登录')
+        console.log(shop)
+        if (shop==true){
+            console.log(123)
+            window.location.href="{:url('login/login')}"
+            // window.history.go(-1)
+        }
+    })
+</script>

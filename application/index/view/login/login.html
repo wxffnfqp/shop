@@ -1,4 +1,5 @@
-{include file="header" title="登录" }
+{include file="head" title="登录" }
+
 <!--loading页结束-->
 	<body>
 		<div class="login clearfloat box-s">
@@ -12,7 +13,7 @@
 						</p>
 						<div class="nr clearfloat fl">
 							<span class="opa3"></span>
-							<input type="text" name="" id="" value="" placeholder="用户姓名" />
+							<input type="text" name="" id="user" value="{$arr.user_name}" placeholder="用户姓名" />
 						</div>
 					</li>
 					<li class="ra3">
@@ -22,7 +23,7 @@
 						</p>
 						<div class="nr clearfloat fl">
 							<span class="opa3"></span>
-							<input type="text" name="" id="" value="" placeholder="登录密码" />
+							<input type="password" name="" id="pwd" value="" placeholder="登录密码" />
 						</div>
 					</li>
 					<li class="ra3">
@@ -32,8 +33,10 @@
 						</p>
 						<div class="nr nrtwo clearfloat fl">
 							<span class="opa3"></span>
-							<input type="text" name="" id="" value="" placeholder="验证码" />
-							<samp class="db fr">0212</samp>
+							<input type="text" name="" id="code" value="" placeholder="验证码" />
+							<samp class="db fr" >
+								<img  style="height: 100%;width: 100%;" id="my_code"  src="{:captcha_src()}" alt="captcha" />
+							</samp>
 						</div>
 					</li>
 				</ul>
@@ -57,7 +60,7 @@
 				</ul>
 			</div>
 			<div class="login-btn">
-				<a href="{:url('Login/xuzhi')}">
+				<a id="login">
 					登录
 				</a>
 				<a href="{:url('Login/register')}">
@@ -67,4 +70,37 @@
 			</div>
 		</div>
 	</body>
+<script>
+	//登录验证
+	$('#login').click(function () {
+		var user=$('#user').val()
+		var pwd=$('#pwd').val()
+		var code=$('#code').val()
+		$.ajax({
+			url:"{:url('login/loginAction')}",
+			data:{
+				user:user,
+				pwd:pwd,
+				code:code,
+			},
+			type:'post',
+			dataType:'json',
+			success:function (res) {
+				if (res.code==1){
+					//showBo.js弹框特效，验证码错误提示框，下面是验证码错误，验证码图片刷新
+					Showbo.Msg.alert(res.message)
+					$('#my_code').attr('src','{:captcha_src()}?'+Math.random())
+				}
+				if (res.code==2){
+					//showBo.js弹框特效，用户名或密码错误提示框，验证码图片刷新
+					Showbo.Msg.alert(res.message)
+					$('#my_code').attr('src','{:captcha_src()}?'+Math.random())
+				}
+				if (res.code==0){
+					window.location.href="{:url('user/center')}"
+				}
+			}
+		})
+	})
+</script>
 </html>
